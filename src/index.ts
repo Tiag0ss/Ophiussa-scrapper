@@ -3,6 +3,7 @@ import { load } from "cheerio";
 import { GamesSearchParamsOptions, GameParamsOptions } from "./interfaces";
 import { METACRITC_URL } from "./urls";
 import request from "./request";
+import { PlatformInfo ,SearchResult} from "./types";
 
 
 export async function GetGameMetaCritic(options: GameParamsOptions) {
@@ -11,7 +12,7 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
         searchString: options.gameName,
     });
 
-    let game = result.find(z => z.title == options.gameName)
+    let game = result.find(z=> z.title == options.gameName)
     if (game) {
 
         const requestOpt = {
@@ -38,7 +39,7 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
 
                         let platforms = $element.find(".c-gamePlatformsSection_list").children();
 
-                        let platInfo: any[] = [];
+                        let platInfo: PlatformInfo[] = [];
 
                         platforms.map(
                             (_index2: number, element2: any) => {
@@ -145,6 +146,7 @@ const getParameterFromURL = (url: string, parameter: string): string | null => {
     const params = new URLSearchParams(urlObj.search);
     return params.get(parameter) as string;
 };
+
 /*
 async function test() {
 

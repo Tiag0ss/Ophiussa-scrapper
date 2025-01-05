@@ -1,4 +1,4 @@
-type SearchResult = {
+export type SearchResult = {
     id?: string; 
     title?: string;
     poster?: string;
@@ -6,7 +6,7 @@ type SearchResult = {
     platforms? :PlatformInfo[]
 }
 
-type PlatformInfo = {
+export type PlatformInfo = {
     id?: string; 
     score?: string; 
 }
