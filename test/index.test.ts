@@ -23,6 +23,6 @@ describe("should", () => {
     
     expect(typeof result).toBe("object");
     expect(result).not.toBeNull();
-    expect(Object.keys(result).length).toBeGreaterThan(0);
+    expect(Object.keys(result as {}).length).toBeGreaterThan(0);
   });
 });

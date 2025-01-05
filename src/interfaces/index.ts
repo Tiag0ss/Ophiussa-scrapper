@@ -27,9 +27,7 @@ export interface GamesSearchParamsOptions {
      */
     sortBy: sortBy;
   }
-
-
-  
+ 
 /**
  *  Interface GamesParamsOptions
  *  @interface
@@ -41,3 +39,15 @@ export interface GameParamsOptions {
      */
     gameName: string;  
   }
+ 
+  /**
+   *  Interface GamesParamsOptions
+   *  @interface
+   *  @classdesc URL parameter options
+   */
+  export interface GameByIdParamsOptions { 
+      /**
+       * @member {string} id
+       */
+      id: string;  
+    }

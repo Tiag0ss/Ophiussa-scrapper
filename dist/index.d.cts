@@ -25,6 +25,17 @@ interface GameParamsOptions {
      */
     gameName: string;
 }
+/**
+ *  Interface GamesParamsOptions
+ *  @interface
+ *  @classdesc URL parameter options
+ */
+interface GameByIdParamsOptions {
+    /**
+     * @member {string} id
+     */
+    id: string;
+}
 
 type SearchResult = {
     id?: string;
@@ -48,7 +59,8 @@ type Review = {
     score?: string;
 };
 
-declare function GetGameMetaCritic(options: GameParamsOptions): Promise<SearchResult | unknown[]>;
+declare function GetGameByIdMetaCritic(options: GameByIdParamsOptions): Promise<unknown[]>;
+declare function GetGameMetaCritic(options: GameParamsOptions): Promise<unknown>;
 declare function SearchGameMetaCritic(options: GamesSearchParamsOptions): Promise<SearchResult[]>;
 
-export { GetGameMetaCritic, SearchGameMetaCritic };
+export { GetGameByIdMetaCritic, GetGameMetaCritic, SearchGameMetaCritic };
