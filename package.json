@@ -1,0 +1,58 @@
+{
+  "name": "ophiussa-scrapper",
+  "type": "module",
+  "version": "2.0.0",
+  "packageManager": "pnpm@8.1.1",
+  "description": "  Ophiussa Games Scrapper.",
+  "license": "MIT",
+  "repository": "http://192.168.1.250:3000/Ophiussa/Ophiussa-scrapper.git",
+  "keywords": [
+    "Metacritic",
+    "metacritic",
+    "video game review"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "lint": "eslint .",
+    "prepublishOnly": "nr build",
+    "release": "bumpp && npm publish",
+    "start": "esno src/index.ts",
+    "playground:start": "esno ./playground/index.ts",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0",
+    "esno": "^4.8.0",
+    "parse5-parser-stream": "^7.1.2",
+    "unbuild": "^3.2.0",
+    "vitest": "^2.1.8"
+  }
+}
