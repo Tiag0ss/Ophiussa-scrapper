@@ -64,14 +64,50 @@ async function GetGameMetaCritic(options) {
               });
             }
           );
-          console.log(platforms.length);
+          let critreviews = [];
+          let criticReviews = $element.find(".c-pageProductGame_row .c-reviewsSection_criticReviews .c-reviewsSection_carousel").children();
+          criticReviews.map(
+            (_index2, element2) => {
+              const $element2 = $(element2);
+              let reviewName = $element2.find(".c-siteReviewHeader_publicationName").text().trim();
+              let externalLink = $element2.find(".c-siteReview_externalLink").attr("href");
+              let quote = $element2.find(".c-siteReview_quote").text().trim();
+              let platform = $element2.find(".c-siteReview_platform").text().trim();
+              critreviews.push({
+                reviewName,
+                quote,
+                platform,
+                externalLink
+              });
+            }
+          );
+          let userreviews = [];
+          let userReviews = $element.find(".c-pageProductGame_row .c-reviewsSection_userReviews div .c-reviewsSection_carousel").children();
+          userReviews.map(
+            (_index2, element2) => {
+              const $element2 = $(element2);
+              let reviewName = $element2.find(".c-siteReviewHeader_username").text().trim();
+              let quote = $element2.find(".c-siteReview_quote").text().trim();
+              let platform = $element2.find(".c-siteReview_platform").text().trim();
+              userreviews.push({
+                reviewName,
+                quote,
+                platform
+              });
+            }
+          );
+          let description = $element.find(".c-productionDetailsGame_description").text() || null;
+          console.log(description);
           resolve({
             id: game.id,
-            name,
+            title: name,
+            description,
             releaseDate: new Date(releaseDate),
             metascore,
             userscore,
-            platforms: platInfo
+            platforms: platInfo,
+            criticreviews: critreviews,
+            userreviews
           });
         }
       )
@@ -133,6 +169,11 @@ const getParameterFromURL = (url, parameter) => {
   const params = new URLSearchParams(urlObj.search);
   return params.get(parameter);
 };
+async function test() {
+  let result2 = await GetGameMetaCritic({ gameName: "Half-Life" });
+  console.log(result2);
+}
+test();
 
 exports.GetGameMetaCritic = GetGameMetaCritic;
 exports.SearchGameMetaCritic = SearchGameMetaCritic;

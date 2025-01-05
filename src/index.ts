@@ -3,7 +3,7 @@ import { load } from "cheerio";
 import { GamesSearchParamsOptions, GameParamsOptions } from "./interfaces";
 import { METACRITC_URL } from "./urls";
 import request from "./request";
-import { PlatformInfo ,SearchResult} from "./types";
+import { PlatformInfo, SearchResult, Review } from "./types";
 
 
 export async function GetGameMetaCritic(options: GameParamsOptions) {
@@ -12,7 +12,7 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
         searchString: options.gameName,
     });
 
-    let game = result.find(z=> z.title == options.gameName)
+    let game = result.find(z => z.title == options.gameName)
     if (game) {
 
         const requestOpt = {
@@ -60,15 +60,56 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
                                 } as PlatformInfo);
                             }
                         );
-                        console.log(platforms.length);
 
+                        let critreviews: Review[] = [];
+
+                        let criticReviews = $element.find(".c-pageProductGame_row .c-reviewsSection_criticReviews .c-reviewsSection_carousel").children();
+                        criticReviews.map(
+                            (_index2: number, element2: any) => {
+                                const $element2 = $(element2);
+
+                                let reviewName = $element2.find(".c-siteReviewHeader_publicationName").text().trim();
+                                let externalLink = $element2.find(".c-siteReview_externalLink").attr("href");
+                                let quote = $element2.find(".c-siteReview_quote").text().trim();
+                                let platform = $element2.find(".c-siteReview_platform").text().trim();
+                                critreviews.push({
+                                    reviewName: reviewName,
+                                    quote: quote,
+                                    platform: platform,
+                                    externalLink: externalLink
+                                } as Review)
+                            }
+                        );
+
+                        let userreviews: Review[] = [];
+                        let userReviews = $element.find(".c-pageProductGame_row .c-reviewsSection_userReviews div .c-reviewsSection_carousel").children();
+                        userReviews.map(
+                            (_index2: number, element2: any) => {
+                                const $element2 = $(element2);
+
+                                let reviewName = $element2.find(".c-siteReviewHeader_username").text().trim(); 
+                                let quote = $element2.find(".c-siteReview_quote").text().trim();
+                                let platform = $element2.find(".c-siteReview_platform").text().trim(); 
+                                userreviews.push({
+                                    reviewName: reviewName,
+                                    quote: quote,
+                                    platform: platform
+                                } as Review)
+                            }
+                        );
+
+                        let description = $element.find(".c-productionDetailsGame_description").text() || null;
+                        console.log(description)
                         resolve({
                             id: game.id,
-                            name: name,
+                            title: name,
+                            description:description,
                             releaseDate: new Date(releaseDate as string),
                             metascore: metascore,
                             userscore: userscore,
-                            platforms: platInfo
+                            platforms: platInfo,
+                            criticreviews: critreviews,
+                            userreviews: userreviews
                         } as SearchResult);
                     }
                     )
@@ -147,18 +188,18 @@ const getParameterFromURL = (url: string, parameter: string): string | null => {
     return params.get(parameter) as string;
 };
 
-/*
+
 async function test() {
 
-    const result = await SearchGameMetaCritic({
+    /*const result = await SearchGameMetaCritic({
         sortBy: "metascore",
         searchString: "Half-Life",
     });
 
-    console.log(result)
-    let result = await GetGameMetaCritic({ gameName: "Half-Life" });
+    console.log(result)*/
+    let result2 = await GetGameMetaCritic({ gameName: "Half-Life" });
 
-    console.log(result)
+    console.log(result2)
 }
 
-test()*/
+test()

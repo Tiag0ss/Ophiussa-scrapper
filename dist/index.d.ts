@@ -29,13 +29,22 @@ interface GameParamsOptions {
 type SearchResult = {
     id?: string;
     title?: string;
+    description?: string;
     poster?: string;
     score?: string;
     platforms?: PlatformInfo[];
+    criticreviews?: Review[];
+    userreviews?: Review[];
 };
 type PlatformInfo = {
     id?: string;
     score?: string;
+};
+type Review = {
+    reviewName?: string;
+    externalLink?: string;
+    quote?: string;
+    platform?: string;
 };
 
 declare function GetGameMetaCritic(options: GameParamsOptions): Promise<SearchResult | unknown[]>;
