@@ -45,6 +45,7 @@ type Review = {
     externalLink?: string;
     quote?: string;
     platform?: string;
+    score?: string;
 };
 
 declare function GetGameMetaCritic(options: GameParamsOptions): Promise<SearchResult | unknown[]>;

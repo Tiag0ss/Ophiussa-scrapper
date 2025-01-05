@@ -20,4 +20,5 @@ export type Review = {
     externalLink?: string; 
     quote?: string; 
     platform?: string; 
+    score?: string; 
 }

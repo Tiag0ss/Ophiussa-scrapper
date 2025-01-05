@@ -72,11 +72,14 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
                                 let externalLink = $element2.find(".c-siteReview_externalLink").attr("href");
                                 let quote = $element2.find(".c-siteReview_quote").text().trim();
                                 let platform = $element2.find(".c-siteReview_platform").text().trim();
+                                let score = $element2.find(".c-siteReviewScore").text().trim(); 
+                                
                                 critreviews.push({
                                     reviewName: reviewName,
                                     quote: quote,
                                     platform: platform,
-                                    externalLink: externalLink
+                                    externalLink: externalLink,
+                                    score:score
                                 } as Review)
                             }
                         );
@@ -90,10 +93,13 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
                                 let reviewName = $element2.find(".c-siteReviewHeader_username").text().trim(); 
                                 let quote = $element2.find(".c-siteReview_quote").text().trim();
                                 let platform = $element2.find(".c-siteReview_platform").text().trim(); 
+                                let score = $element2.find(".c-siteReviewScore").text().trim();
+                                
                                 userreviews.push({
                                     reviewName: reviewName,
                                     quote: quote,
-                                    platform: platform
+                                    platform: platform,
+                                    score:score
                                 } as Review)
                             }
                         );
