@@ -91,7 +91,6 @@ async function GetGameMetaCritic(options) {
             }
           );
           let description = $element.find(".c-productionDetailsGame_description").text() || null;
-          console.log(description);
           resolve({
             id: game.id,
             title: name,
