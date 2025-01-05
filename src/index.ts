@@ -2,7 +2,7 @@
 import { load } from "cheerio";
 import { GamesSearchParamsOptions, GameParamsOptions } from "./interfaces";
 import { METACRITC_URL } from "./urls";
-import request from "./request"; 
+import request from "./request";
 
 
 export async function GetGameMetaCritic(options: GameParamsOptions) {
@@ -13,41 +13,67 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
 
     let game = result.find(z => z.title == options.gameName)
     if (game) {
- 
+
         const requestOpt = {
             url: `${METACRITC_URL}/game/${encodeURIComponent(game.id ?? "")}/`,
             method: "get",
         };
-    
+
         const res = await request(requestOpt);
         const $ = load(res);
 
-        let result = $(".c-productHero_player-scoreInfo")
-        .map(
-            (_index: number, element: any) =>
-                new Promise(async (resolve, _reject) => {
-                    const $element = $(element);
+        let result = $(".c-pageProductGame")
+            .map(
+                (_index: number, element: any) =>
+                    new Promise(async (resolve, _reject) => {
+                        const $element = $(element);
 
-                    let name =  $element.find("div div .c-productHero_title").text() || null;
-                    
-                    let releaseDate =  $element.find("div div .g-text-xsmall .u-text-uppercase").text() || null;
-                    
-                    let metascore =  $element.find("div div .c-productHero_scoreInfo div .c-siteReviewScore_background-critic_medium .c-siteReviewScore span").text() || null;
+                        let name = $element.find(".c-productHero_title").text() || null;
 
-                    let userscore =  $element.find("div div .c-productHero_scoreInfo div .c-siteReviewScore_background-user .c-siteReviewScore span").text() || null;
- 
-                    resolve({
-                        id: game.id,
-                        name : name,
-                        releaseDate : new Date(releaseDate as string),
-                        metascore:metascore,
-                        userscore:userscore
-                    });
-                }
+                        let releaseDate = $element.find(".g-text-xsmall .u-text-uppercase").text() || null;
+
+                        let metascore = $element.find(".c-productHero_scoreInfo .c-siteReviewScore_background-critic_medium .c-siteReviewScore").text() || null;
+
+                        let userscore = $element.find(".c-productHero_scoreInfo .c-siteReviewScore_background-user .c-siteReviewScore").text() || null;
+
+                        let platforms = $element.find(".c-gamePlatformsSection_list").children();
+
+                        let platInfo: any[] = [];
+
+                        platforms.map(
+                            (_index2: number, element2: any) => {
+                                const $element2 = $(element2);
+                                let platformLink = $element2.attr("href")
+
+                                let platform = getParameterFromURL(`${METACRITC_URL}${platformLink}` as string, "platform")
+                                if (platform === null) {
+                                    platformLink = $element2.attr("to")
+                                    platform = getParameterFromURL(`${METACRITC_URL}${platformLink}` as string, "platform")
+                                }
+
+                                let score = $element2.find(".c-siteReviewScore").text()
+
+                                platInfo.push({
+                                    platform: platform,
+                                    rating: score === "tbd" ? "0" : score
+                                } as PlatformInfo);
+                            }
+                        );
+                        console.log(platforms.length);
+
+                        resolve({
+                            id: game.id,
+                            name: name,
+                            releaseDate: new Date(releaseDate as string),
+                            metascore: metascore,
+                            userscore: userscore,
+                            platforms: platInfo
+                        } as SearchResult);
+                    }
+                    )
             )
-        )
-        
-        return Promise.all(result); 
+
+        return Promise.all(result);
     } else
         return {} as SearchResult
 }
@@ -101,26 +127,36 @@ export async function SearchGameMetaCritic(options: GamesSearchParamsOptions) {
     return Promise.all(result as SearchResult[]);
 }
 
-const extractGameName = (path: string): string => { 
+const extractGameName = (path: string): string => {
     // Remove leading and trailing slashes 
-    const trimmedPath = path.replace(/^\/|\/$/g, ''); 
+    const trimmedPath = path.replace(/^\/|\/$/g, '');
     // Split the path by '/' 
-    const parts = trimmedPath.split('/'); 
+    const parts = trimmedPath.split('/');
     // The game name is the last part 
-    const gameName = parts[parts.length - 1]; 
-    return gameName; 
+    const gameName = parts[parts.length - 1];
+    return gameName;
 };
 
+
+const getParameterFromURL = (url: string, parameter: string): string | null => {
+    // Create a URL object 
+    const urlObj = new URL(url);
+    // Use URLSearchParams to get the parameter value 
+    const params = new URLSearchParams(urlObj.search);
+    return params.get(parameter) as string;
+};
+/*
 async function test() {
 
-    /*const result = await SearchGameMetaCritic({
+    const result = await SearchGameMetaCritic({
         sortBy: "metascore",
         searchString: "Half-Life",
     });
 
-    console.log(result)*/
- 
-    console.log(await GetGameMetaCritic({ gameName: "Half-Life" }))
+    console.log(result)
+    let result = await GetGameMetaCritic({ gameName: "Half-Life" });
+
+    console.log(result)
 }
 
-test()
+test()*/

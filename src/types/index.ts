@@ -3,4 +3,10 @@ type SearchResult = {
     title?: string;
     poster?: string;
     score?: string;  
+    platforms? :PlatformInfo[]
+}
+
+type PlatformInfo = {
+    id?: string; 
+    score?: string; 
 }
