@@ -51,3 +51,19 @@ export interface GameParamsOptions {
        */
       id: string;  
     }
+
+
+    // HowLongToBeat
+
+    
+/**
+ *  Interface GamesParamsOptions
+ *  @interface
+ *  @classdesc URL parameter options
+ */
+export interface HLTBSearchParamsOptions { 
+  /**
+   * @member {string} searchString
+   */
+  searchString: string;
+}

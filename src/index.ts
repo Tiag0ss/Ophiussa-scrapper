@@ -1,9 +1,9 @@
 
 import { load } from "cheerio";
-import { GamesSearchParamsOptions, GameParamsOptions, GameByIdParamsOptions } from "./interfaces";
-import { METACRITC_URL } from "./urls";
+import { GamesSearchParamsOptions, GameParamsOptions, GameByIdParamsOptions, HLTBSearchParamsOptions } from "./interfaces";
+import { METACRITC_URL, HOWLONGTOBEAT_URL } from "./urls";
 import request from "./request";
-import { PlatformInfo, SearchResult, Review } from "./types";
+import { PlatformInfo, SearchResult, Review, HLTBTimes, HLTBAdditionalContent, HLTBGameTimeTableSinglePlayer, HLTBGameTimeTableSpeedrun, HLTBGameTimeTableMultiplayer, HLTBPlatformTimeTable } from "./types";
 
 
 
@@ -112,7 +112,7 @@ export async function GetGameByIdMetaCritic(options: GameByIdParamsOptions) {
                     } as SearchResult);
                 }
                 )
-        )
+        ).get();
 
     return Promise.all(result);
 }
@@ -123,9 +123,9 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
     });
 
     let game = result.find(z => z.title == options.gameName)
-    
+
     if (game) {
-        
+
         let result2 = await GetGameByIdMetaCritic({ id: game.id ?? "" });
 
         return result2[0]
@@ -177,12 +177,260 @@ export async function SearchGameMetaCritic(options: GamesSearchParamsOptions) {
                 });
             }
             )
-    )
-        .get();
+    ).get();
 
     return Promise.all(result as SearchResult[]);
 }
+/*
+export async function SearchGameHowLongToBeat(options: HLTBSearchParamsOptions) {
+    const requestOpt = {
+        url: `${HOWLONGTOBEAT_URL}/?q=${encodeURIComponent(options.searchString)}`,
+        method: "get",
+        headers : {
+            "User-Agent":
+              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
+          }
+    };
+    
+    console.log(requestOpt)
 
+    const res = await request(requestOpt);
+    const $ = load(res);
+    
+    //$('[xml\\:id="search-results-header"');
+    console.log($.html())
+    let result = $(
+        ".content_100 .GameCard_inside_blur__cP8_l"
+    ).map(
+        (_index: number, element: any) =>
+            new Promise(async (resolve, _reject) => {
+                const $element = $(element);
+                const id = $element.find("a").attr("href") || null;
+                const cover = $element.find("img").attr("src") || null;
+                const name = $element.find("h2").text().trim() || null;
+                console.log(name);
+
+                
+                resolve({
+                    id: extractGameName(id as string),
+                    name:name,
+                    cover:cover
+                });
+            }
+            )
+    ).get();
+
+    return Promise.all(result as SearchResult[]);
+}
+*/
+
+
+export async function GetGameByIdHowLongToBeat(options: GameByIdParamsOptions) {
+    const requestOpt = {
+        url: `${HOWLONGTOBEAT_URL}/game/${options.id ?? ""}`,
+        method: "get",
+        headers: {
+            "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        }
+    };
+
+    const res = await request(requestOpt);
+    const $ = load(res);
+
+
+    let result = $(
+        ".Layout_main__RMpyO"
+    ).map(
+        (_index: number, element: any) =>
+            new Promise(async (resolve, _reject) => {
+                const $element = $(element);
+
+                const name = $element.find(".GameHeader_profile_header__q_PID").text().trim() || null;
+
+
+                let main: HLTBTimes[] = [];
+                let times = $element.find(".content_75_static .GameStats_game_times__KHrRY ul").children();
+                times.map(
+                    (_index2: number, element2: any) => {
+                        const $element2 = $(element2);
+
+                        let type = $element2.find("h4").text().trim();
+                        let time = $element2.find("h5").text().trim();
+                        main.push({
+                            time: time,
+                            type: type,
+                        } as HLTBTimes)
+                    }
+                );
+
+                let addc: HLTBAdditionalContent[] = [];
+
+                let additionalcontent = $element.find(`table:contains("Additional Content") tbody`).children();
+
+                additionalcontent.map(
+                    (_index2: number, element2: any) => {
+                        const $element2 = $(element2);
+
+                        let id = extractGameName($element2.find("td a").attr("href") as string);
+                        let name = $element2.find("td a").text().trim();
+                        let polled = $element2.find("td:eq(1)").text().trim();
+                        let rated = $element2.find("td:eq(2)").text().trim();
+                        let main = $element2.find("td:eq(3)").text().trim();
+                        let mainplus = $element2.find("td:eq(4)").text().trim();
+                        let completist = $element2.find("td:eq(5)").text().trim();
+                        let all = $element2.find("td:eq(6)").text().trim();
+
+
+                        let ret = {
+                            id: id,
+                            name: name,
+                            polled: polled,
+                            rated: rated,
+                            main: main,
+                            mainplus: mainplus,
+                            completist: completist,
+                            all: all
+                        }
+                        addc.push(ret as HLTBAdditionalContent)
+                    }
+                );
+
+
+                let sp: HLTBGameTimeTableSinglePlayer[] = [];
+                let spc = $element.find(`table:contains("Single-Player") tbody`).children();
+
+                spc.map(
+                    (_index2: number, element2: any) => {
+                        const $element2 = $(element2);
+
+                        let name = $element2.find("td:eq(0)").text().trim();
+                        let polled = $element2.find("td:eq(1)").text().trim();
+                        let average = $element2.find("td:eq(2)").text().trim();
+                        let median = $element2.find("td:eq(3)").text().trim();
+                        let rushed = $element2.find("td:eq(4)").text().trim();
+                        let leisure = $element2.find("td:eq(5)").text().trim();
+
+
+                        let ret = {
+                            name: name,
+                            polled: polled,
+                            average: average,
+                            median: median,
+                            rushed: rushed,
+                            leisure: leisure
+                        }
+
+                        sp.push(ret as HLTBGameTimeTableSinglePlayer)
+                    }
+                );
+
+
+                let speedrun: HLTBGameTimeTableSpeedrun[] = [];
+                let speedrunc = $element.find(`table:contains("Speedruns") tbody`).children();
+
+                speedrunc.map(
+                    (_index2: number, element2: any) => {
+                        const $element2 = $(element2);
+
+                        let name = $element2.find("td:eq(0)").text().trim();
+                        let polled = $element2.find("td:eq(1)").text().trim();
+                        let average = $element2.find("td:eq(2)").text().trim();
+                        let median = $element2.find("td:eq(3)").text().trim();
+                        let fastest = $element2.find("td:eq(4)").text().trim();
+                        let slowest = $element2.find("td:eq(5)").text().trim();
+
+
+                        let ret = {
+                            name: name,
+                            polled: polled,
+                            average: average,
+                            median: median,
+                            fastest: fastest,
+                            slowest: slowest
+                        }
+                        speedrun.push(ret as HLTBGameTimeTableSpeedrun)
+                    }
+                );
+
+                let multiplayer: HLTBGameTimeTableMultiplayer[] = [];
+                let multiplayerc = $element.find(`table:contains("Multi-Player") tbody`).children();
+
+                multiplayerc.map(
+                    (_index2: number, element2: any) => {
+                        const $element2 = $(element2);
+
+                        let name = $element2.find("td:eq(0)").text().trim();
+                        let polled = $element2.find("td:eq(1)").text().trim();
+                        let average = $element2.find("td:eq(2)").text().trim();
+                        let median = $element2.find("td:eq(3)").text().trim();
+                        let least = $element2.find("td:eq(4)").text().trim();
+                        let most = $element2.find("td:eq(5)").text().trim();
+
+
+                        let ret = {
+                            name: name,
+                            polled: polled,
+                            average: average,
+                            median: median,
+                            least: least,
+                            most: most
+                        }
+                        console.log(ret);
+
+                        multiplayer.push(ret as HLTBGameTimeTableMultiplayer)
+                    }
+                );
+
+
+                let platform: HLTBPlatformTimeTable[] = [];
+                let platformc = $element.find(`table:contains("Platform") tbody`).children();
+
+                platformc.map(
+                    (_index2: number, element2: any) => {
+                        const $element2 = $(element2);
+
+                        let name = $element2.find("td:eq(0)").text().trim();
+                        let polled = $element2.find("td:eq(1)").text().trim();
+                        let main = $element2.find("td:eq(2)").text().trim();
+                        let mainplus = $element2.find("td:eq(3)").text().trim();
+                        let completist = $element2.find("td:eq(4)").text().trim();
+                        let fastest = $element2.find("td:eq(5)").text().trim();
+                        let slowest = $element2.find("td:eq(6)").text().trim();
+
+
+                        let ret = {
+                            name: name,
+                            polled: polled,
+                            main: main,
+                            mainplus: mainplus,
+                            completist: completist,
+                            fastest: fastest,
+                            slowest: slowest
+                        }
+
+                        platform.push(ret as HLTBPlatformTimeTable)
+                    }
+                );
+
+                console.log(spc.length);
+
+                resolve({
+                    id: options.id,
+                    name: name,
+                    main: main,
+                    additionalcontent: addc,
+                    singleplyer: sp,
+                    speedrun: speedrun,
+                    multiplayer: multiplayer
+                });
+            }
+            )
+    ).get();
+
+    return Promise.all(result as SearchResult[]);
+
+}
 const extractGameName = (path: string): string => {
     // Remove leading and trailing slashes 
     const trimmedPath = path.replace(/^\/|\/$/g, '');
@@ -202,18 +450,26 @@ const getParameterFromURL = (url: string, parameter: string): string | null => {
     return params.get(parameter) as string;
 };
 
-/*
-async function test() {
 
-    const result = await SearchGameMetaCritic({
-        sortBy: "metascore",
-        searchString: "Half-Life",
-    });
+//async function test() {
 
-    console.log(result)
-    let result2 = await GetGameMetaCritic({ gameName: "Half-Life" });
+/*const result = await SearchGameMetaCritic({
+    sortBy: "metascore",
+    searchString: "Half-Life",
+});*/
 
-    console.log(result2)
-}
+//console.log(result)
+//let result2 = await GetGameMetaCritic({ gameName: "Destiny 2" });
 
-test()*/
+//console.log(result2)
+/* const result = await SearchGameHowLongToBeat({
+     searchString : "half-life"
+ });
+ console.log(result)*/
+/*const result = await GetGameByIdHowLongToBeat({
+    id: "43894"
+})
+console.log(result)*/
+//}
+
+//test()
