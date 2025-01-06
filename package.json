@@ -1,12 +1,12 @@
 {
   "name": "ophiussa-scrapper",
   "type": "module",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Tiag0ss",
   "packageManager": "pnpm@8.1.1",
   "description": "  Ophiussa Games Scrapper.",
   "license": "MIT",
-  "repository": "http://192.168.1.250:3000/Ophiussa/Ophiussa-scrapper.git",
+  "repository": "https://github.com/anhado/Ophiussa-scrapper.git",
   "keywords": [
     "Metacritic",
     "metacritic",
