@@ -375,8 +375,7 @@ export async function GetGameByIdHowLongToBeat(options: GameByIdParamsOptions) {
                             median: median,
                             least: least,
                             most: most
-                        }
-                        console.log(ret);
+                        } 
 
                         multiplayer.push(ret as HLTBGameTimeTableMultiplayer)
                     }
@@ -412,9 +411,7 @@ export async function GetGameByIdHowLongToBeat(options: GameByIdParamsOptions) {
                         platform.push(ret as HLTBPlatformTimeTable)
                     }
                 );
-
-                console.log(spc.length);
-
+ 
                 resolve({
                     id: options.id,
                     name: name,

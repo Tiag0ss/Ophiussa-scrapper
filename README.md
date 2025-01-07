@@ -14,6 +14,23 @@
 
 # 📖 API Documentation
 
+## GetGameByIdHowLongToBeat([options: GameByIdParamsOptions])
+  
+|  @interface          | @member  |     @type     |  @values                                                               |
+|----------------------|----------|:-------------:|-----------------------------------------------------------------------:|
+|GameByIdParamsOptions | id       |  string       |  ex:43894                                                          |
+
+
+```js
+const scrapper = require("ophiussa-scrapper")
+
+let result = await scrapper.GetGameByIdHowLongToBeat({
+    id : "43894"
+})
+
+console.log(result)
+```
+
 ## GetGameByIdMetaCritic([options: GameByIdParamsOptions])
   
 |  @interface          | @member  |     @type     |  @values                                                               |
@@ -22,7 +39,7 @@
 
 
 ```js
-const scrapper = require("Ophiussa-scrapper")
+const scrapper = require("ophiussa-scrapper")
 
 let result = await scrapper.GetGameByIdMetaCritic({
     id : "elden-ring-shadow-of-the-erdtree"
@@ -39,7 +56,7 @@ console.log(result)
 
 
 ```js
-const scrapper = require("Ophiussa-scrapper")
+const scrapper = require("ophiussa-scrapper")
 
 let result = await scrapper.GetGameMetaCritic({
     gameName : "Elden Ring"
@@ -58,7 +75,7 @@ console.log(result)
 
 
 ```js
-const scrapper = require("Ophiussa-scrapper")
+const scrapper = require("ophiussa-scrapper")
 
 let result = await scrapper.SearchGameMetaCritic({
     searchString : "Elden Ring",
