@@ -279,7 +279,6 @@ async function GetGameByIdHowLongToBeat(options) {
               least,
               most
             };
-            console.log(ret);
             multiplayer.push(ret);
           }
         );
@@ -296,7 +295,6 @@ async function GetGameByIdHowLongToBeat(options) {
             $element2.find("td:eq(6)").text().trim();
           }
         );
-        console.log(spc.length);
         resolve({
           id: options.id,
           name,
