@@ -152,7 +152,7 @@ export async function SearchGameMetaCritic(options: GamesSearchParamsOptions) {
             break;
     }
     const requestOpt = {
-        url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString)}/?page=1&category=13${sort}`,
+        url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString.replaceAll('/',' '))}/?page=1&category=13${sort}`,
         method: "get",
     };
 
@@ -447,8 +447,7 @@ const getParameterFromURL = (url: string, parameter: string): string | null => {
     const params = new URLSearchParams(urlObj.search);
     return params.get(parameter) as string;
 };
-
-
+ 
 /*
 async function test() {
 const result = await SearchGameMetaCritic({

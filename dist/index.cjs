@@ -141,7 +141,7 @@ async function SearchGameMetaCritic(options) {
       break;
   }
   const requestOpt = {
-    url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString)}/?page=1&category=13${sort}`,
+    url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString.replaceAll("/", " "))}/?page=1&category=13${sort}`,
     method: "get"
   };
   const res = await request(requestOpt);
