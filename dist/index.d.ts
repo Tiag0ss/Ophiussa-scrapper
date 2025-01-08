@@ -59,7 +59,7 @@ type Review = {
     score?: string;
 };
 
-declare function GetGameByIdMetaCritic(options: GameByIdParamsOptions): Promise<unknown[]>;
+declare function GetGameByIdMetaCritic(options: GameByIdParamsOptions): Promise<unknown>;
 declare function GetGameMetaCritic(options: GameParamsOptions): Promise<unknown>;
 declare function SearchGameMetaCritic(options: GamesSearchParamsOptions): Promise<SearchResult[]>;
 declare function GetGameByIdHowLongToBeat(options: GameByIdParamsOptions): Promise<SearchResult[]>;

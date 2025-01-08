@@ -104,7 +104,8 @@ async function GetGameByIdMetaCritic(options) {
       }
     )
   ).get();
-  return Promise.all(result);
+  let ret = await Promise.all(result);
+  return ret[0];
 }
 async function GetGameMetaCritic(options) {
   const result = await SearchGameMetaCritic({
@@ -114,7 +115,7 @@ async function GetGameMetaCritic(options) {
   let game = result.find((z) => z.title == options.gameName);
   if (game) {
     let result2 = await GetGameByIdMetaCritic({ id: game.id ?? "" });
-    return result2[0];
+    return result2;
   } else
     return {};
 }

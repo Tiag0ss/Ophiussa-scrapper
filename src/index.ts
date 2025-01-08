@@ -113,8 +113,9 @@ export async function GetGameByIdMetaCritic(options: GameByIdParamsOptions) {
                 }
                 )
         ).get();
+    let ret = await Promise.all(result);;
 
-    return Promise.all(result);
+    return ret[0]
 }
 export async function GetGameMetaCritic(options: GameParamsOptions) {
     const result = await SearchGameMetaCritic({
@@ -128,7 +129,7 @@ export async function GetGameMetaCritic(options: GameParamsOptions) {
 
         let result2 = await GetGameByIdMetaCritic({ id: game.id ?? "" });
 
-        return result2[0]
+        return result2
 
     } else
         return {} as SearchResult
@@ -375,7 +376,7 @@ export async function GetGameByIdHowLongToBeat(options: GameByIdParamsOptions) {
                             median: median,
                             least: least,
                             most: most
-                        } 
+                        }
 
                         multiplayer.push(ret as HLTBGameTimeTableMultiplayer)
                     }
@@ -411,7 +412,7 @@ export async function GetGameByIdHowLongToBeat(options: GameByIdParamsOptions) {
                         platform.push(ret as HLTBPlatformTimeTable)
                     }
                 );
- 
+
                 resolve({
                     id: options.id,
                     name: name,
@@ -448,25 +449,30 @@ const getParameterFromURL = (url: string, parameter: string): string | null => {
 };
 
 
-//async function test() {
-
-/*const result = await SearchGameMetaCritic({
+/*
+async function test() {
+const result = await SearchGameMetaCritic({
     sortBy: "metascore",
     searchString: "Half-Life",
 });*/
 
 //console.log(result)
-//let result2 = await GetGameMetaCritic({ gameName: "Destiny 2" });
+/*let result2 = await GetGameMetaCritic({ gameName: "Destiny 2" });
 
-//console.log(result2)
-/* const result = await SearchGameHowLongToBeat({
+console.log(result2)
+ 
+const result = await GetGameByIdMetaCritic({
+    id : "half-life"
+});
+console.log(result)
+const result = await SearchGameHowLongToBeat({
      searchString : "half-life"
  });
- console.log(result)*/
-/*const result = await GetGameByIdHowLongToBeat({
+ console.log(result)
+const result = await GetGameByIdHowLongToBeat({
     id: "43894"
 })
-console.log(result)*/
-//}
+console.log(result)
+}
 
-//test()
+test()*/
