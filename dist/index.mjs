@@ -283,17 +283,28 @@ async function GetGameByIdHowLongToBeat(options) {
             multiplayer.push(ret);
           }
         );
+        let platform = [];
         let platformc = $element.find(`table:contains("Platform") tbody`).children();
         platformc.map(
           (_index2, element2) => {
             const $element2 = $(element2);
-            $element2.find("td:eq(0)").text().trim();
-            $element2.find("td:eq(1)").text().trim();
-            $element2.find("td:eq(2)").text().trim();
-            $element2.find("td:eq(3)").text().trim();
-            $element2.find("td:eq(4)").text().trim();
-            $element2.find("td:eq(5)").text().trim();
-            $element2.find("td:eq(6)").text().trim();
+            let name2 = $element2.find("td:eq(0)").text().trim();
+            let polled = $element2.find("td:eq(1)").text().trim();
+            let main2 = $element2.find("td:eq(2)").text().trim();
+            let mainplus = $element2.find("td:eq(3)").text().trim();
+            let completist = $element2.find("td:eq(4)").text().trim();
+            let fastest = $element2.find("td:eq(5)").text().trim();
+            let slowest = $element2.find("td:eq(6)").text().trim();
+            let ret = {
+              name: name2,
+              polled,
+              main: main2,
+              mainplus,
+              completist,
+              fastest,
+              slowest
+            };
+            platform.push(ret);
           }
         );
         resolve({
@@ -303,7 +314,8 @@ async function GetGameByIdHowLongToBeat(options) {
           additionalcontent: addc,
           singleplyer: sp,
           speedrun,
-          multiplayer
+          multiplayer,
+          platform
         });
       }
     )

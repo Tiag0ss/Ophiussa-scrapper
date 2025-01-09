@@ -152,7 +152,7 @@ export async function SearchGameMetaCritic(options: GamesSearchParamsOptions) {
             break;
     }
     const requestOpt = {
-        url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString.replaceAll('/',' '))}/?page=1&category=13${sort}`,
+        url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString.replaceAll('/', ' '))}/?page=1&category=13${sort}`,
         method: "get",
     };
 
@@ -418,9 +418,10 @@ export async function GetGameByIdHowLongToBeat(options: GameByIdParamsOptions) {
                     name: name,
                     main: main,
                     additionalcontent: addc,
-                    singleplyer: sp,
+                    singleplayer: sp,
                     speedrun: speedrun,
-                    multiplayer: multiplayer
+                    multiplayer: multiplayer,
+                    platform: platform
                 });
             }
             )
@@ -447,31 +448,31 @@ const getParameterFromURL = (url: string, parameter: string): string | null => {
     const params = new URLSearchParams(urlObj.search);
     return params.get(parameter) as string;
 };
- 
-/*
-async function test() {
-const result = await SearchGameMetaCritic({
-    sortBy: "metascore",
-    searchString: "Half-Life",
-});*/
 
-//console.log(result)
-/*let result2 = await GetGameMetaCritic({ gameName: "Destiny 2" });
 
-console.log(result2)
- 
-const result = await GetGameByIdMetaCritic({
-    id : "half-life"
-});
-console.log(result)
-const result = await SearchGameHowLongToBeat({
-     searchString : "half-life"
- });
- console.log(result)
-const result = await GetGameByIdHowLongToBeat({
-    id: "43894"
-})
-console.log(result)
+/*async function test() {
+    const result = await SearchGameMetaCritic({
+        sortBy: "metascore",
+        searchString: "Half-Life",
+    });*/
+
+    //console.log(result)
+    /*let result2 = await GetGameMetaCritic({ gameName: "Destiny 2" });
+    
+    console.log(result2)
+     
+    const result = await GetGameByIdMetaCritic({
+        id : "half-life"
+    });
+    console.log(result)
+    const result = await SearchGameHowLongToBeat({
+         searchString : "half-life"
+     });
+     console.log(result)
+    const result = await GetGameByIdHowLongToBeat({
+        id: "43894"
+    })
+    console.log(result)
 }
 
 test()*/
