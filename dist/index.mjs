@@ -9,6 +9,8 @@ function request(props) {
     axios(props).then((response) => {
       resolve(response.data);
     }).catch((error) => {
+      console.error(props);
+      console.error(error);
       if (error.response) {
         reject(error.response.data);
       } else if (error.request) {
@@ -23,7 +25,10 @@ function request(props) {
 async function GetGameByIdMetaCritic(options) {
   const requestOpt = {
     url: `${METACRITC_URL}/game/${encodeURIComponent(options.id ?? "")}/`,
-    method: "get"
+    method: "get",
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+    }
   };
   const res = await request(requestOpt);
   const $ = load(res);
@@ -136,7 +141,10 @@ async function SearchGameMetaCritic(options) {
   }
   const requestOpt = {
     url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString.replaceAll("/", " "))}/?page=1&category=13${sort}`,
-    method: "get"
+    method: "get",
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+    }
   };
   const res = await request(requestOpt);
   const $ = load(res);
@@ -312,7 +320,7 @@ async function GetGameByIdHowLongToBeat(options) {
           name,
           main,
           additionalcontent: addc,
-          singleplyer: sp,
+          singleplayer: sp,
           speedrun,
           multiplayer,
           platform

@@ -9,6 +9,8 @@ export default function request(props: Props): Promise<any> {
         resolve(response.data);
       })
       .catch((error: AxiosError) => {
+        console.error(props)
+        console.error(error)
         if (error.response) {
           reject(error.response.data);
         } else if (error.request) {
