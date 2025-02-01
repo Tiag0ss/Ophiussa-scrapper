@@ -7,7 +7,7 @@ function _interopDefaultCompat (e) { return e && typeof e === 'object' && 'defau
 
 const axios__default = /*#__PURE__*/_interopDefaultCompat(axios);
 
-const METACRITC_URL = "https://www.metacritic.com";
+const METACRITC_URL = "https://metacritic.com/";
 const HOWLONGTOBEAT_URL = "https://howlongtobeat.com/";
 
 function request(props) {
@@ -30,7 +30,7 @@ function request(props) {
 
 async function GetGameByIdMetaCritic(options) {
   const requestOpt = {
-    url: `${METACRITC_URL}/game/${encodeURIComponent(options.id ?? "")}/`,
+    url: `${METACRITC_URL}game/${encodeURIComponent(options.id ?? "")}/`,
     method: "get",
     headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
@@ -146,7 +146,7 @@ async function SearchGameMetaCritic(options) {
       break;
   }
   const requestOpt = {
-    url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString.replaceAll("/", " "))}/?page=1&category=13${sort}`,
+    url: `${METACRITC_URL}search/${encodeURIComponent(options.searchString.replaceAll("/", " "))}/?page=1&category=13${sort}`,
     method: "get",
     headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"

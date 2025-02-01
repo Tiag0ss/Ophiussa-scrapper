@@ -9,7 +9,7 @@ import { PlatformInfo, SearchResult, Review, HLTBTimes, HLTBAdditionalContent, H
 
 export async function GetGameByIdMetaCritic(options: GameByIdParamsOptions) {
     const requestOpt = {
-        url: `${METACRITC_URL}/game/${encodeURIComponent(options.id ?? "")}/`,
+        url: `${METACRITC_URL}game/${encodeURIComponent(options.id ?? "")}/`,
         method: "get",
         headers: {
             "User-Agent":
@@ -156,7 +156,7 @@ export async function SearchGameMetaCritic(options: GamesSearchParamsOptions) {
             break;
     }
     const requestOpt = {
-        url: `${METACRITC_URL}/search/${encodeURIComponent(options.searchString.replaceAll('/', ' '))}/?page=1&category=13${sort}`,
+        url: `${METACRITC_URL}search/${encodeURIComponent(options.searchString.replaceAll('/', ' '))}/?page=1&category=13${sort}`,
         method: "get",
         headers: {
             "User-Agent":
@@ -457,30 +457,30 @@ const getParameterFromURL = (url: string, parameter: string): string | null => {
     return params.get(parameter) as string;
 };
 
-
-/*async function test() {
+/*
+async function test() {
     const result = await SearchGameMetaCritic({
         sortBy: "metascore",
         searchString: "Half-Life",
-    });*/
+    });
 
-    //console.log(result)
-    /*let result2 = await GetGameMetaCritic({ gameName: "Destiny 2" });
+    console.log(result)
+    let result2 = await GetGameMetaCritic({ gameName: "Destiny 2" });
     
     console.log(result2)
      
-    const result = await GetGameByIdMetaCritic({
+    const result3 = await GetGameByIdMetaCritic({
         id : "half-life"
     });
-    console.log(result)
-    const result = await SearchGameHowLongToBeat({
-         searchString : "half-life"
-     });
-     console.log(result)
-    const result = await GetGameByIdHowLongToBeat({
+    console.log(result3)
+   // const result4 = await SearchGameHowLongToBeat({
+   //      searchString : "half-life"
+   //  });
+   //  console.log(result4)
+    const result5 = await GetGameByIdHowLongToBeat({
         id: "43894"
     })
-    console.log(result)
+    console.log(result5)
 }
 
 test()*/
